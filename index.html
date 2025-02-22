@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Textile Jobwork Management</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f0f4f8;
+        }
+        .job-card:hover {
+            transform: translateY(-2px);
+            transition: all 0.3s ease;
+        }
+    </style>
+</head>
+<body>
+    <div class="min-h-screen">
+        <!-- Navigation -->
+        <nav class="bg-blue-600 text-white p-4">
+            <div class="container mx-auto flex justify-between items-center">
+                <h1 class="text-2xl font-bold">TextileWork Manager</h1>
+                <button id="addNewBtn" class="bg-white text-blue-600 px-4 py-2 rounded-lg hover:bg-blue-50">
+                    <i class="bi bi-plus-lg"></i> Add New
+                </button>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <div class="container mx-auto p-4">
+            <!-- Dashboard Stats -->
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                <div class="bg-white p-4 rounded-lg shadow">
+                    <h3 class="text-gray-500">Total Workers</h3>
+                    <p class="text-2xl font-bold" id="totalWorkers">0</p>
+                </div>
+                <div class="bg-white p-4 rounded-lg shadow">
+                    <h3 class="text-gray-500">Active Jobs</h3>
+                    <p class="text-2xl font-bold" id="activeJobs">0</p>
+                </div>
+                <div class="bg-white p-4 rounded-lg shadow">
+                    <h3 class="text-gray-500">Completed Jobs</h3>
+                    <p class="text-2xl font-bold" id="completedJobs">0</p>
+                </div>
+                <div class="bg-white p-4 rounded-lg shadow">
+                    <h3 class="text-gray-500">Pending Jobs</h3>
+                    <p class="text-2xl font-bold" id="pendingJobs">0</p>
+                </div>
+            </div>
+
+            <!-- Job Management Section -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Workers List -->
+                <div class="bg-white p-4 rounded-lg shadow">
+                    <h2 class="text-xl font-bold mb-4">Workers</h2>
+                    <div id="workersList" class="space-y-2">
+                        <!-- Workers will be dynamically added here -->
+                    </div>
+                </div>
+
+                <!-- Job Types -->
+                <div class="bg-white p-4 rounded-lg shadow">
+                    <h2 class="text-xl font-bold mb-4">Job Types</h2>
+                    <div id="jobTypesList" class="space-y-2">
+                        <div class="p-2 bg-gray-50 rounded flex justify-between items-center">
+                            <span>Lace Attachment</span>
+                            <span class="badge bg-blue-100 text-blue-800 px-2 py-1 rounded">5 workers</span>
+                        </div>
+                        <div class="p-2 bg-gray-50 rounded flex justify-between items-center">
+                            <span>Stone Work</span>
+                            <span class="badge bg-blue-100 text-blue-800 px-2 py-1 rounded">3 workers</span>
+                        </div>
+                        <div class="p-2 bg-gray-50 rounded flex justify-between items-center">
+                            <span>Folding Work</span>
+                            <span class="badge bg-blue-100 text-blue-800 px-2 py-1 rounded">4 workers</span>
+                        </div>
+                        <div class="p-2 bg-gray-50 rounded flex justify-between items-center">
+                            <span>Blouse Cutting</span>
+                            <span class="badge bg-blue-100 text-blue-800 px-2 py-1 rounded">2 workers</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Active Jobs -->
+                <div class="bg-white p-4 rounded-lg shadow">
+                    <h2 class="text-xl font-bold mb-4">Active Jobs</h2>
+                    <div id="activeJobsList" class="space-y-2">
+                        <!-- Active jobs will be dynamically added here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add New Modal -->
+    <div id="addModal" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full">
+        <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
+            <div class="mt-3">
+                <h3 class="text-lg font-medium leading-6 text-gray-900 mb-4">Add New</h3>
+                <div class="mb-4">
+                    <select id="addType" class="w-full p-2 border rounded">
+                        <option value="worker">Add Worker</option>
+                        <option value="job">Add Job</option>
+                    </select>
+                </div>
+                <div id="workerForm" class="space-y-4">
+                    <input type="text" placeholder="Worker Name" id="workerName" class="w-full p-2 border rounded">
+                    <input type="tel" placeholder="Phone Number" id="workerPhone" class="w-full p-2 border rounded">
+                    <select id="workerSkills" class="w-full p-2 border rounded" multiple>
+                        <option value="lace">Lace Attachment</option>
+                        <option value="stone">Stone Work</option>
+                        <option value="folding">Folding Work</option>
+                        <option value="blouse">Blouse Cutting</option>
+                    </select>
+                </div>
+                <div id="jobForm" class="hidden space-y-4">
+                    <select id="jobType" class="w-full p-2 border rounded">
+                        <option value="lace">Lace Attachment</option>
+                        <option value="stone">Stone Work</option>
+                        <option value="folding">Folding Work</option>
+                        <option value="blouse">Blouse Cutting</option>
+                    </select>
+                    <input type="text" placeholder="Description" id="jobDescription" class="w-full p-2 border rounded">
+                    <select id="assignWorker" class="w-full p-2 border rounded">
+                        <!-- Workers will be dynamically added here -->
+                    </select>
+                    <input type="date" id="deadline" class="w-full p-2 border rounded">
+                </div>
+                <div class="flex justify-end mt-4">
+                    <button id="cancelAdd" class="mr-2 px-4 py-2 bg-gray-200 text-gray-800 rounded hover:bg-gray-300">Cancel</button>
+                    <button id="confirmAdd" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Add</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Initialize data storage
+        let workers = [];
+        let jobs = [];
+
+        // DOM Elements
+        const addNewBtn = document.getElementById('addNewBtn');
+        const addModal = document.getElementById('addModal');
+        const addType = document.getElementById('addType');
+        const workerForm = document.getElementById('workerForm');
+        const jobForm = document.getElementById('jobForm');
+        const cancelAdd = document.getElementById('cancelAdd');
+        const confirmAdd = document.getElementById('confirmAdd');
+        const workersList = document.getElementById('workersList');
+        const activeJobsList = document.getElementById('activeJobsList');
+
+        // Event Listeners
+        addNewBtn.addEventListener('click', () => {
+            addModal.classList.remove('hidden');
+        });
+
+        cancelAdd.addEventListener('click', () => {
+            addModal.classList.add('hidden');
+            resetForms();
+        });
+
+        addType.addEventListener('change', (e) => {
+            if (e.target.value === 'worker') {
+                workerForm.classList.remove('hidden');
+                jobForm.classList.add('hidden');
+            } else {
+                workerForm.classList.add('hidden');
+                jobForm.classList.remove('hidden');
+            }
+        });
+
+        confirmAdd.addEventListener('click', () => {
+            if (addType.value === 'worker') {
+                addWorker();
+            } else {
+                addJob();
+            }
+            addModal.classList.add('hidden');
+            resetForms();
+            updateDashboard();
+        });
+
+        function addWorker() {
+            const name = document.getElementById('workerName').value;
+            const phone = document.getElementById('workerPhone').value;
+            const skills = Array.from(document.getElementById('workerSkills').selectedOptions).map(option => option.value);
+            
+            const worker = {
+                id: Date.now(),
+                name,
+                phone,
+                skills,
+                activeJobs: 0
+            };
+            
+            workers.push(worker);
+            renderWorkers();
+            updateAssignWorkerSelect();
+        }
+
+        function addJob() {
+            const type = document.getElementById('jobType').value;
+            const description = document.getElementById('jobDescription').value;
+            const workerId = document.getElementById('assignWorker').value;
+            const deadline = document.getElementById('deadline').value;
+            
+            const job = {
+                id: Date.now(),
+                type,
+                description,
+                workerId,
+                deadline,
+                status: 'active'
+            };
+            
+            jobs.push(job);
+            const worker = workers.find(w => w.id === parseInt(workerId));
+            if (worker) worker.activeJobs++;
+            
+            renderJobs();
+        }
+
+        function renderWorkers() {
+            workersList.innerHTML = workers.map(worker => `
+                <div class="p-3 bg-gray-50 rounded mb-2 flex justify-between items-center">
+                    <div>
+                        <h4 class="font-medium">${worker.name}</h4>
+                        <p class="text-sm text-gray-600">${worker.skills.join(', ')}</p>
+                    </div>
+                    <span class="badge bg-blue-100 text-blue-800 px-2 py-1 rounded">${worker.activeJobs} jobs</span>
+                </div>
+            `).join('');
+        }
+
+        function renderJobs() {
+            activeJobsList.innerHTML = jobs.filter(job => job.status === 'active').map(job => {
+                const worker = workers.find(w => w.id === parseInt(job.workerId));
+                return `
+                    <div class="p-3 bg-gray-50 rounded mb-2">
+                        <div class="flex justify-between items-center mb-2">
+                            <h4 class="font-medium">${job.type}</h4>
+                            <span class="text-sm text-gray-600">Due: ${job.deadline}</span>
+                        </div>
+                        <p class="text-sm text-gray-600">${job.description}</p>
+                        <p class="text-sm text-gray-600 mt-1">Assigned to: ${worker ? worker.name : 'Unassigned'}</p>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function updateAssignWorkerSelect() {
+            const select = document.getElementById('assignWorker');
+            select.innerHTML = workers.map(worker => 
+                `<option value="${worker.id}">${worker.name}</option>`
+            ).join('');
+        }
+
+        function resetForms() {
+            document.getElementById('workerName').value = '';
+            document.getElementById('workerPhone').value = '';
+            document.getElementById('workerSkills').selectedIndex = -1;
+            document.getElementById('jobType').selectedIndex = 0;
+            document.getElementById('jobDescription').value = '';
+            document.getElementById('deadline').value = '';
+        }
+
+        function updateDashboard() {
+            document.getElementById('totalWorkers').textContent = workers.length;
+            document.getElementById('activeJobs').textContent = jobs.filter(j => j.status === 'active').length;
+            document.getElementById('completedJobs').textContent = jobs.filter(j => j.status === 'completed').length;
+            document.getElementById('pendingJobs').textContent = jobs.filter(j => !j.workerId).length;
+        }
+
+        // Initial render
+        updateDashboard();
+        updateAssignWorkerSelect();
+    </script>
+<script>document.body.addEventListener('wheel', e => { if (!e.ctrlKey) return; e.preventDefault(); return }, { passive: false })</script>
+	</body>
+</html>
